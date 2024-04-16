@@ -49,10 +49,48 @@ public class WeatherApp extends JFrame {
         searchButton.setBounds(375, 13, 47, 45);
         add(searchButton);
 
+        // texto de temperatura
+        JLabel temperatureText = new JLabel("10 C");
+        temperatureText.setBounds(0, 350, 450, 54);
+        temperatureText.setFont(new Font("Dialog", Font.BOLD, 48));
+
         // Imagem do app
         JLabel weatherConditionImage = new JLabel(loadImage("src/assets/cloudy.png"));
         weatherConditionImage.setBounds(0, 125,450,217);
         add(weatherConditionImage);
+
+        // centralizando texto
+        temperatureText.setHorizontalAlignment(SwingConstants.CENTER);
+        add(temperatureText);
+
+        // descrição das condições do tempo
+        JLabel weatherConditionDesc = new JLabel("Cloudy");
+        weatherConditionDesc.setBounds(0,405,450,36);
+        weatherConditionDesc.setFont(new Font("Dialog", Font.PLAIN, 32));
+        weatherConditionDesc.setHorizontalAlignment(SwingConstants.CENTER);
+        add(weatherConditionDesc);
+
+        // imagem da umidade
+        JLabel humidityImage = new JLabel(loadImage("src/assets/humidity.png"));
+        humidityImage.setBounds(15,500,74,66);
+        add(humidityImage);
+
+        // texto da umidade
+        JLabel humidityText = new JLabel("<html><b>Umidade</b> 100%</html>");
+        humidityText.setBounds(90, 500, 85, 55);
+        humidityText.setFont(new Font("Dialog", Font.PLAIN, 16));
+        add(humidityText);
+
+        // imagem da velocidade do ar
+        JLabel windspeedImage = new JLabel(loadImage("src/assets/windspeed.png"));
+        windspeedImage.setBounds(220,500,74,66);
+        add(windspeedImage);
+
+        // texto da velocidade do ar
+        JLabel windspeedText = new JLabel("<html><b>Vel. do ar</b> 15km</html>");
+        windspeedText.setBounds(310,500,85,55);
+        windspeedText.setFont(new Font("Dialog", Font.PLAIN, 16));
+        add(windspeedText);
     }
 
     private ImageIcon loadImage(String resourcePath){
