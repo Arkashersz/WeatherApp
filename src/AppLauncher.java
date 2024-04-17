@@ -6,7 +6,8 @@ public class AppLauncher {
             @Override
             public void run() {
                 //tela de interface do app
-                new WeatherApp().setVisible(true);
+                new WeatherAppGUI().setVisible(true);
+                //System.out.println(WeatherAppGUI.getLocationData("Rio de Janeiro"));
             }
         });
     }
