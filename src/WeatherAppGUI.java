@@ -1,6 +1,8 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,14 +41,6 @@ public class WeatherAppGUI extends JFrame {
         searchTextField.setFont(new Font("Dialog", Font.PLAIN, 24));
 
         add(searchTextField);
-
-        //botão de procurar
-        JButton searchButton = new JButton(loadImage("src/assets/search.png"));
-
-        // alterando o cursor ao passar o mouse sobre o botão
-        searchButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        searchButton.setBounds(375, 13, 47, 45);
-        add(searchButton);
 
         // texto de temperatura
         JLabel temperatureText = new JLabel("10 C");
@@ -90,6 +84,26 @@ public class WeatherAppGUI extends JFrame {
         windspeedText.setBounds(310,500,85,55);
         windspeedText.setFont(new Font("Dialog", Font.PLAIN, 16));
         add(windspeedText);
+
+        //botão de procurar
+        JButton searchButton = new JButton(loadImage("src/assets/search.png"));
+
+        // alterando o cursor ao passar o mouse sobre o botão
+        searchButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        searchButton.setBounds(375, 13, 47, 45);
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // obter a localização por usuário
+                String userInput = searchTextField.getText();
+
+                // validando o input e removendo os espaços do texto
+                if(userInput.replaceAll("\\s", "").length() <= 0){
+                    return;
+                }
+            }
+        });
+        add(searchButton);
     }
 
     private ImageIcon loadImage(String resourcePath){
