@@ -2,12 +2,15 @@ import javax.swing.*;
 
 public class AppLauncher {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable(){
             @Override
-            public void run() {
-                //tela de interface do app
+            public void run(){
                 new WeatherAppGUI().setVisible(true);
-                //System.out.println(WeatherAppGUI.getLocationData("Rio de Janeiro"));
+
+//                System.out.println(WeatherApp.getLocationData("Tokyo"));
+
+//                System.out.println(WeatherApp.getCurrentTime());
+
             }
         });
     }
