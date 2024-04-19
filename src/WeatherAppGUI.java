@@ -1,3 +1,5 @@
+import org.json.simple.JSONObject;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -8,99 +10,97 @@ import java.io.File;
 import java.io.IOException;
 
 public class WeatherAppGUI extends JFrame {
-    public WeatherAppGUI() {
-        // ajustar a interface e adicionar um titulo
-        super("Weather App"); // Definindo o título diretamente aqui
+    private JSONObject weatherData;
 
-        // configurar a interface para encerrar o processo do app assim que ele fechar
+    public WeatherAppGUI(){
+        super("Weather App");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        //definir o tamanho da interface em pixels
-        setSize(450, 650); // Removi os parâmetros width e height
-
-        // carregar a interface
+        setSize(450, 650);
         setLocationRelativeTo(null);
-
-        // definindo como nulo o gerenciamento do layout para posicionar manualmente os componentes
         setLayout(null);
-
-        // evitar redimensionamento da interface
         setResizable(false);
-
         addGuiComponents();
     }
 
     private void addGuiComponents(){
-        // campo de pesquisa
         JTextField searchTextField = new JTextField();
-
-        // definir localização e o tamanho do componente
         searchTextField.setBounds(15, 15, 351, 45);
-
-        // mudar o estilo de fonte e tamanho
         searchTextField.setFont(new Font("Dialog", Font.PLAIN, 24));
-
         add(searchTextField);
+        JLabel weatherConditionImage = new JLabel(loadImage("src/assets/cloudy.png"));
+        weatherConditionImage.setBounds(0, 125, 450, 217);
+        add(weatherConditionImage);
 
-        // texto de temperatura
         JLabel temperatureText = new JLabel("10 C");
         temperatureText.setBounds(0, 350, 450, 54);
         temperatureText.setFont(new Font("Dialog", Font.BOLD, 48));
 
-        // Imagem do app
-        JLabel weatherConditionImage = new JLabel(loadImage("src/assets/cloudy.png"));
-        weatherConditionImage.setBounds(0, 125,450,217);
-        add(weatherConditionImage);
-
-        // centralizando texto
         temperatureText.setHorizontalAlignment(SwingConstants.CENTER);
         add(temperatureText);
 
-        // descrição das condições do tempo
         JLabel weatherConditionDesc = new JLabel("Cloudy");
-        weatherConditionDesc.setBounds(0,405,450,36);
+        weatherConditionDesc.setBounds(0, 405, 450, 36);
         weatherConditionDesc.setFont(new Font("Dialog", Font.PLAIN, 32));
         weatherConditionDesc.setHorizontalAlignment(SwingConstants.CENTER);
         add(weatherConditionDesc);
 
-        // imagem da umidade
         JLabel humidityImage = new JLabel(loadImage("src/assets/humidity.png"));
-        humidityImage.setBounds(15,500,74,66);
+        humidityImage.setBounds(15, 500, 74, 66);
         add(humidityImage);
 
-        // texto da umidade
         JLabel humidityText = new JLabel("<html><b>Umidade</b> 100%</html>");
         humidityText.setBounds(90, 500, 85, 55);
         humidityText.setFont(new Font("Dialog", Font.PLAIN, 16));
         add(humidityText);
 
-        // imagem da velocidade do ar
         JLabel windspeedImage = new JLabel(loadImage("src/assets/windspeed.png"));
-        windspeedImage.setBounds(220,500,74,66);
+        windspeedImage.setBounds(220, 500, 74, 66);
         add(windspeedImage);
 
-        // texto da velocidade do ar
-        JLabel windspeedText = new JLabel("<html><b>Vel. do ar</b> 15km</html>");
-        windspeedText.setBounds(310,500,85,55);
+        JLabel windspeedText = new JLabel("<html><b>Vel. do ar</b> 15km/h</html>");
+        windspeedText.setBounds(310, 500, 85, 55);
         windspeedText.setFont(new Font("Dialog", Font.PLAIN, 16));
         add(windspeedText);
 
-        //botão de procurar
         JButton searchButton = new JButton(loadImage("src/assets/search.png"));
 
-        // alterando o cursor ao passar o mouse sobre o botão
         searchButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         searchButton.setBounds(375, 13, 47, 45);
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // obter a localização por usuário
                 String userInput = searchTextField.getText();
-
-                // validando o input e removendo os espaços do texto
                 if(userInput.replaceAll("\\s", "").length() <= 0){
                     return;
                 }
+                weatherData = WeatherApp.getWeatherData(userInput);
+                String weatherCondition = (String) weatherData.get("weather_condition");
+
+                switch(weatherCondition){
+                    case "Clear":
+                        weatherConditionImage.setIcon(loadImage("src/assets/clear.png"));
+                        break;
+                    case "Cloudy":
+                        weatherConditionImage.setIcon(loadImage("src/assets/cloudy.png"));
+                        break;
+                    case "Rain":
+                        weatherConditionImage.setIcon(loadImage("src/assets/rain.png"));
+                        break;
+                    case "Snow":
+                        weatherConditionImage.setIcon(loadImage("src/assets/snow.pngImage"));
+                        break;
+                }
+
+                double temperature = (double) weatherData.get("temperature");
+                temperatureText.setText(temperature + " C");
+
+                weatherConditionDesc.setText(weatherCondition);
+
+                long humidity = (long) weatherData.get("humidity");
+                humidityText.setText("<html><b>Umidade</b> " + humidity + "%</html>");
+
+                double windspeed = (double) weatherData.get("windspeed");
+                windspeedText.setText("<html><b>Vel. do ar</b> " + windspeed + "km/h</html>");
             }
         });
         add(searchButton);
@@ -108,10 +108,7 @@ public class WeatherAppGUI extends JFrame {
 
     private ImageIcon loadImage(String resourcePath){
         try{
-            //Ler o arquivo de imagem
             BufferedImage image = ImageIO.read(new File(resourcePath));
-
-            //retornar um icone da imagem
             return new ImageIcon(image);
         }catch(IOException e){
             e.printStackTrace();
@@ -121,3 +118,11 @@ public class WeatherAppGUI extends JFrame {
         return null;
     }
 }
+
+
+
+
+
+
+
+
